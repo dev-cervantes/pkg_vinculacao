@@ -25,8 +25,7 @@ class VinculacaoController {
 
   Future<void> enviarCpfCnpj(String cpfCnpj, Function(DadosAplicativo dadosAplicativo) onVinculado) async {
     etapas.value = 2;
-
-    _vincular(onVinculado);
+    await _vincular(onVinculado);
   }
 
   Future<void> gerarNovoCodigo(Function(DadosAplicativo dadosAplicativo) onVinculado) async {
