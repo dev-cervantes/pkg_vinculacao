@@ -1,6 +1,7 @@
 import 'package:pkg_vinculacao/src/enums/aplicativo_enum.dart';
 
 class DadosAplicativo {
+  final String idVinculacaoAplicativo;
   final String cpfCnpj;
   final String nomeEmpresa;
   final String? host;
@@ -9,6 +10,7 @@ class DadosAplicativo {
   final Map<String, dynamic>? detalhes;
 
   DadosAplicativo({
+    required this.idVinculacaoAplicativo,
     required this.cpfCnpj,
     required this.nomeEmpresa,
     required this.aplicativo,
@@ -18,6 +20,7 @@ class DadosAplicativo {
   });
 
   factory DadosAplicativo.fromMap(Map<String, dynamic> json) => DadosAplicativo(
+        idVinculacaoAplicativo: json["IdVinculacaoAplicativo"],
         cpfCnpj: json["CpfCnpj"],
         nomeEmpresa: json["NomeEmpresa"],
         aplicativo: AplicativoEnum.getByValue(json["Aplicativo"]),

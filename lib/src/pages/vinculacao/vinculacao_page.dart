@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:linear_timer/linear_timer.dart';
 import 'package:pkg_flutter_utils/masked.dart';
 import 'package:pkg_flutter_utils/validators.dart';
 import 'package:pkg_vinculacao/src/controllers/vinculacao/vinculacao_controller.dart';
 import 'package:pkg_vinculacao/src/models/dados_aplicativo/dados_aplicativo.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:shimmer/shimmer.dart';
 import 'dart:async';
 
 class VinculacaoPage extends StatefulWidget {
-  final nomeAplicativo;
+  final String nomeAplicativo;
   final Function(DadosAplicativo dadosAplicativo) onVinculado;
   final Function(BuildContext, Exception, StackTrace) onCodigoNaoEncontrado;
 
@@ -72,58 +70,63 @@ class _VinculacaoPageState extends State<VinculacaoPage> with TickerProviderStat
               Expanded(
                 child: Card(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 122.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: ValueListenableBuilder(
                       valueListenable: _controller.etapas,
                       builder: (_, value, __) {
                         if (value == 1) {
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                "Olá! ",
-                                style: theme.textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Text(
-                                "Realize a vinculação com o aplicativo",
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 32,
-                              ),
-                              Text(
-                                'CPF/CNPJ',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500, fontSize: 16),
-                              ),
-                              const SizedBox(
-                                height: 6,
-                              ),
-                              Form(
-                                key: _formKey,
-                                child: SizedBox(
-                                  width: 400,
-                                  child: TextFormField(
-                                    controller: _cpfCnpjController,
-                                    decoration: const InputDecoration(hintText: 'Digite o CPF ou CNPJ'),
-                                    inputFormatters: [InputMasked.cnpjCpf()],
-                                    keyboardType: TextInputType.number,
-                                    validator: InputValidator([CnpjCpfValidator()], isRequired: false).validate,
-                                    onSaved: (value) {
-                                      _controller.cpfCnpj = value!;
-                                    },
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Olá! ",
+                                    style: theme.textTheme.titleLarge?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 24,
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Text(
+                                    "Realize a vinculação com o aplicativo",
+                                    style: theme.textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 32,
+                                  ),
+                                  Text(
+                                    'CPF/CNPJ',
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500, fontSize: 16),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  Form(
+                                    key: _formKey,
+                                    child: SizedBox(
+                                      width: 250,
+                                      child: TextFormField(
+                                        controller: _cpfCnpjController,
+                                        decoration: const InputDecoration(hintText: 'Digite o CPF ou CNPJ'),
+                                        inputFormatters: [InputMasked.cnpjCpf()],
+                                        keyboardType: TextInputType.number,
+                                        validator: InputValidator([CnpjCpfValidator()], isRequired: false).validate,
+                                        onSaved: (value) {
+                                          _controller.cpfCnpj = value!;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 24,
+                                  ),
+                                ],
                               ),
                               Center(
                                 child: SizedBox(
@@ -152,13 +155,14 @@ class _VinculacaoPageState extends State<VinculacaoPage> with TickerProviderStat
                                 ),
                               );
                             }
+
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 QrImageView(
                                   data: value,
-                                  size: 150,
+                                  size: 120,
                                 ),
                                 const SizedBox(width: 16),
                                 Column(
@@ -169,7 +173,7 @@ class _VinculacaoPageState extends State<VinculacaoPage> with TickerProviderStat
                                       'Código de vinculação',
                                       style: theme.textTheme.titleLarge?.copyWith(
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 30,
+                                        fontSize: 22,
                                       ),
                                     ),
                                     Text(
@@ -192,7 +196,7 @@ class _VinculacaoPageState extends State<VinculacaoPage> with TickerProviderStat
                                           backgroundColor: theme.colorScheme.primary.withOpacity(0.3),
                                           forward: false,
                                           onTimerEnd: () {
-                                            _controller.gerarNovoCodigo(widget.onVinculado);
+                                            _controller.gerarCodigo(widget.onVinculado);
                                           },
                                         ),
                                       ),
@@ -220,7 +224,7 @@ class _VinculacaoPageState extends State<VinculacaoPage> with TickerProviderStat
       if (_formKey.currentState?.validate() ?? false) {
         _formKey.currentState?.save();
         if (_controller.cpfCnpj.isNotEmpty) {
-          await _controller.enviarCpfCnpj(_controller.cpfCnpj, widget.onVinculado);
+          await _controller.gerarCodigo(widget.onVinculado);
         }
       }
     } catch (e, s) {

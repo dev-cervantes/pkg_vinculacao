@@ -12,23 +12,16 @@ class VinculacaoController {
 
   String cpfCnpj = '';
 
-  Future<void> _vincular(Function(DadosAplicativo dadosAplicativo) onVinculado) async {
+  Future<void> gerarCodigo(Function(DadosAplicativo dadosAplicativo) onVinculado) async {
+    etapas.value = 2;
+
     await _apiVinculacao.vincular(
-      (value) {
+          (value) {
         codigo.value = value.codigo;
         dataExpiracao.value = value.dataExpiracao;
       },
       onVinculado,
-      cpfCnpj,
+      cpfCnpj
     );
-  }
-
-  Future<void> enviarCpfCnpj(String cpfCnpj, Function(DadosAplicativo dadosAplicativo) onVinculado) async {
-    etapas.value = 2;
-    await _vincular(onVinculado);
-  }
-
-  Future<void> gerarNovoCodigo(Function(DadosAplicativo dadosAplicativo) onVinculado) async {
-    await _vincular(onVinculado);
   }
 }
