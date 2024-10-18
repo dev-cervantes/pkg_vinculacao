@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linear_timer/linear_timer.dart';
 import 'package:pkg_flutter_utils/masked.dart';
 import 'package:pkg_flutter_utils/validators.dart';
@@ -10,12 +11,14 @@ import 'dart:async';
 
 class VinculacaoPage extends StatefulWidget {
   final String nomeAplicativo;
+  final String svgLogoPath;
   final Function(DadosAplicativo dadosAplicativo) onVinculado;
   final Function(BuildContext, Exception, StackTrace) onCodigoNaoEncontrado;
 
   const VinculacaoPage({
     super.key,
     required this.nomeAplicativo,
+    required this.svgLogoPath,
     required this.onVinculado,
     required this.onCodigoNaoEncontrado,
   });
@@ -38,7 +41,6 @@ class _VinculacaoPageState extends State<VinculacaoPage> with TickerProviderStat
       statusBarColor: theme.colorScheme.primary,
       statusBarIconBrightness: Brightness.light,
     ));
-
 
     return KeyboardListener(
       autofocus: true,
@@ -67,7 +69,16 @@ class _VinculacaoPageState extends State<VinculacaoPage> with TickerProviderStat
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const FlutterLogo(size: 200),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withOpacity(0.2),
+                          borderRadius: const BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: SvgPicture.asset(
+                          widget.svgLogoPath,
+                          height: 200,
+                        ),
+                      ),
                       const SizedBox(
                         height: 16,
                       ),
@@ -87,8 +98,8 @@ class _VinculacaoPageState extends State<VinculacaoPage> with TickerProviderStat
                         builder: (_, value, __) {
                           if (value == 1) {
                             return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,35 +129,40 @@ class _VinculacaoPageState extends State<VinculacaoPage> with TickerProviderStat
                                     const SizedBox(
                                       height: 6,
                                     ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Form(
-                                          key: _formKey,
-                                          child: SizedBox(
-                                            width: 240,
-                                            child: TextFormField(
-                                              controller: _cpfCnpjController,
-                                              decoration: const InputDecoration(hintText: 'Digite o CPF ou CNPJ'),
-                                              inputFormatters: [InputMasked.cnpjCpf()],
-                                              keyboardType: TextInputType.number,
-                                              validator: InputValidator([CnpjCpfValidator()], isRequired: true).validate,
-                                              onSaved: (value) {
-                                                _controller.cpfCnpj = value!;
-                                              },
+                                    SizedBox(
+                                      width: 380,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Form(
+                                            key: _formKey,
+                                            child: SizedBox(
+                                              width: 240,
+                                              child: TextFormField(
+                                                controller: _cpfCnpjController,
+                                                decoration: const InputDecoration(hintText: 'Digite o CPF ou CNPJ'),
+                                                inputFormatters: [InputMasked.cnpjCpf()],
+                                                keyboardType: TextInputType.number,
+                                                validator: InputValidator([CnpjCpfValidator()], isRequired: true).validate,
+                                                onSaved: (value) {
+                                                  _controller.cpfCnpj = value!;
+                                                },
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        TextButton.icon(
-                                          onPressed: () async {
-                                            await _save();
-                                          },
-                                          label: const Text('VINCULAR'),
-                                          icon: const Icon(Icons.keyboard_double_arrow_right_outlined),
-                                          iconAlignment: IconAlignment.end,
-                                        )
-                                      ],
+                                          Spacer(),
+                                          TextButton.icon(
+                                            onPressed: () async {
+                                              await _save();
+                                            },
+                                            label: const Text('VINCULAR'),
+                                            icon: const Icon(Icons.keyboard_double_arrow_right_outlined),
+                                            iconAlignment: IconAlignment.end,
+                                          )
+                                        ],
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 24,

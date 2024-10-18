@@ -13,6 +13,7 @@ dependencies:
   linear_timer: ^2.0.0
   web_socket_channel: ^3.0.1
   shimmer: ^3.0.0
+  flutter_svg: ^2.0.10+1
   pkg_flutter_utils:
     git:
       url: git@github.com:dev-cervantes/pkg_flutter_utils.git
