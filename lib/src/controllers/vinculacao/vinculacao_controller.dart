@@ -6,22 +6,30 @@ import 'package:pkg_vinculacao/src/models/dados_aplicativo/dados_aplicativo.dart
 class VinculacaoController {
   final IApiVinculacao _apiVinculacao = ApiVinculacao();
 
-  ValueNotifier<String> codigo = ValueNotifier<String>('');
-  ValueNotifier<int> etapas = ValueNotifier<int>(1);
-  ValueNotifier<DateTime> dataExpiracao = ValueNotifier<DateTime>(DateTime.now());
+  final ValueNotifier<String> codigo = ValueNotifier<String>('');
+  final ValueNotifier<int> etapas = ValueNotifier<int>(1);
+  final ValueNotifier<DateTime> dataExpiracao = ValueNotifier<DateTime>(DateTime.now());
+
+  final ValueNotifier<bool> loading = ValueNotifier<bool>(false);
 
   String cpfCnpj = '';
 
   Future<void> gerarCodigo(Function(DadosAplicativo dadosAplicativo) onVinculado) async {
-    etapas.value = 2;
+    try {
+      loading.value = true;
 
-    await _apiVinculacao.vincular(
-          (value) {
-        codigo.value = value.codigo;
-        dataExpiracao.value = value.dataExpiracao;
-      },
-      onVinculado,
-      cpfCnpj
-    );
+      await _apiVinculacao.vincular(
+        (value) {
+          codigo.value = value.codigo;
+          dataExpiracao.value = value.dataExpiracao;
+        },
+        onVinculado,
+        cpfCnpj,
+      );
+
+      etapas.value = 2;
+    } finally {
+      loading.value = false;
+    }
   }
 }
