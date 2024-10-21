@@ -57,6 +57,7 @@ class _VinculacaoPageState extends State<VinculacaoPage> {
         child: Stack(
           children: [
             GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: 0,
