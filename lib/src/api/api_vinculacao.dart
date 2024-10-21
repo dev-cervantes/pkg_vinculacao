@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:pkg_flutter_utils/extensions.dart';
@@ -8,13 +7,20 @@ import 'package:pkg_vinculacao/src/models/dados_aplicativo/dados_aplicativo.dart
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class ApiVinculacao implements IApiVinculacao{
+class ApiVinculacao implements IApiVinculacao {
   WebSocketChannel? _channel;
 
-  Future<void> _conectarWebSocket(Function(Vinculacao value) onCodigo, Function(DadosAplicativo aplicativo) onVinculado, String cpfCnpj) async {
-    _channel ??= IOWebSocketChannel.connect(Uri.parse('ws://localhost:8000/api/v1/gerar-codigo/${cpfCnpj.extractNumbers()}'), headers:  {
-      'Chave': 'Z3VpbGhlcm1lbWVwZXJkaWRvbm9nbw=='
-    });
+  Future<void> _conectarWebSocket(
+    Function(Vinculacao value) onCodigo,
+    Function(DadosAplicativo aplicativo) onVinculado,
+    String cpfCnpj
+  ) async {
+    _channel ??= IOWebSocketChannel.connect(
+      Uri.parse('ws://10.0.0.100:8000/api/v1/gerar-codigo/${cpfCnpj.extractNumbers()}'),
+      headers: {
+        'Chave': 'Z3VpbGhlcm1lbWVwZXJkaWRvbm9nbw==',
+      },
+    );
 
     await _channel?.ready;
 
@@ -30,7 +36,7 @@ class ApiVinculacao implements IApiVinculacao{
           onVinculado.call(DadosAplicativo.fromMap(data));
           _fecharWebSocket();
         }
-        print (event.toString());
+        print(event.toString());
       },
     );
   }
@@ -47,7 +53,7 @@ class ApiVinculacao implements IApiVinculacao{
 
         _channel!.sink.add(json);
       }
-     return;
+      return;
     } catch (e) {
       _fecharWebSocket();
       throw Exception('Erro ao buscar código: ${e.toString()}');
