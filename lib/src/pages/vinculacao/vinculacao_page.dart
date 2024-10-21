@@ -9,14 +9,14 @@ import 'package:pkg_vinculacao/src/controllers/vinculacao/vinculacao_controller.
 import 'package:pkg_vinculacao/src/widgets/center_box_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class VinculacaoNovaPage extends StatefulWidget {
+class VinculacaoPage extends StatefulWidget {
   final String nomeAplicativo;
   final String svgLogoPath;
   final String svgBackgroundPath;
   final Function(DadosAplicativo dadosAplicativo) onVinculado;
   final Function(BuildContext, Exception, StackTrace) onCodigoNaoEncontrado;
 
-  const VinculacaoNovaPage({
+  const VinculacaoPage({
     super.key,
     required this.nomeAplicativo,
     required this.svgLogoPath,
@@ -26,10 +26,10 @@ class VinculacaoNovaPage extends StatefulWidget {
   });
 
   @override
-  State<VinculacaoNovaPage> createState() => _VinculacaoNovaPageState();
+  State<VinculacaoPage> createState() => _VinculacaoPageState();
 }
 
-class _VinculacaoNovaPageState extends State<VinculacaoNovaPage> {
+class _VinculacaoPageState extends State<VinculacaoPage> {
   final VinculacaoController _controller = VinculacaoController();
   final TextEditingController _cpfCnpjController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
